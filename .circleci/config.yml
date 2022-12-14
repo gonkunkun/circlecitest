@@ -61,7 +61,7 @@ workflows:
         type: approval
         requires:
           - Using-Node
-          - Fetch-COde
+          - Fetch-Code
     - Now-Complete:
         requires:
         - Hold-for-Approval

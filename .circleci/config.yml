@@ -72,5 +72,7 @@ workflows:
   build-and-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
+          context:
+            - CIRCLECI_SAMPLE_CONTEXT
           repo: ""
           tag: ""

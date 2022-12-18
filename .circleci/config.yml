@@ -101,4 +101,6 @@ workflows:
         tag: "${CIRCLE_SHA1}"
         path: "./docker"
         dockerfile: "Dockerfile"
-    - manual-build-and-push
+    - manual-build-and-push:
+        context:
+          - CIRCLECI_SAMPLE_CONTEXT

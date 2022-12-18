@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@8.2.1
+
 jobs:
   Hello-World:
     docker:
@@ -65,3 +69,8 @@ workflows:
     - Now-Complete:
         requires:
         - Hold-for-Approval
+  build-and-deploy:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: ""
+          tag: ""

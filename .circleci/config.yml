@@ -76,3 +76,5 @@ workflows:
             - CIRCLECI_SAMPLE_CONTEXT
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           tag: "${CIRCLE_SHA1}"
+          path: "./docker"
+          dockerfile: "dockerfile"

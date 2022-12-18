@@ -54,7 +54,7 @@ jobs:
               echo 'The work is now complete.'
   manual-build-and-push:
     docker:
-    - image: cimg/node:1.17
+    - image: cimg/node:17.2
       auth:
         username: mydockerhub-user
         password: $DOCKERHUB_PASSWORD

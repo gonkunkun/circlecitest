@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@2.1.0
   aws-ecr: circleci/aws-ecr@8.2.1
 
 jobs:
@@ -51,6 +52,28 @@ jobs:
             name: Approval Now-Complete
             command: |
               echo 'The work is now complete.'
+  manual-build-and-push:
+    docker:
+    - image: cimg/node:1.17
+      auth:
+        username: mydockerhub-user
+        password: $DOCKERHUB_PASSWORD
+    steps:
+    - checkout
+    - setup_remote_docker
+    - aws-cli/install
+    - run :
+        name: docker build
+        command: |
+          docker build -f ./docker/Dockerfile -t ${AWS_RESOURCE_NAME_PREFIX}:latest .
+    - run:
+        name: push
+        command: |
+          aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+          docker tag ${AWS_RESOURCE_NAME_PREFIX}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}
+# https://zenn.dev/takamin55/articles/6900fa8b2ac21c
+
 workflows:
   # Example-Workflow:
   #   jobs:
@@ -71,10 +94,11 @@ workflows:
   #       - Hold-for-Approval
   build-and-deploy:
     jobs:
-      - aws-ecr/build-and-push-image:
-          context:
-            - CIRCLECI_SAMPLE_CONTEXT
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          tag: "${CIRCLE_SHA1}"
-          path: "./docker"
-          dockerfile: "Dockerfile"
+    - aws-ecr/build-and-push-image:
+        context:
+          - CIRCLECI_SAMPLE_CONTEXT
+        repo: "${AWS_RESOURCE_NAME_PREFIX}"
+        tag: "${CIRCLE_SHA1}"
+        path: "./docker"
+        dockerfile: "Dockerfile"
+    - manual-build-and-push

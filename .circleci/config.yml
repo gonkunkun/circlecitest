@@ -52,27 +52,27 @@ jobs:
             command: |
               echo 'The work is now complete.'
 workflows:
-  Example-Workflow:
-    jobs:
-    - Hello-World
-    - Fetch-Code:
-        requires:
-          - Hello-World
-    - Using-Node:
-        requires:
-          - Fetch-Code
-    - Hold-for-Approval:
-        type: approval
-        requires:
-          - Using-Node
-          - Fetch-Code
-    - Now-Complete:
-        requires:
-        - Hold-for-Approval
+  # Example-Workflow:
+  #   jobs:
+  #   - Hello-World
+  #   - Fetch-Code:
+  #       requires:
+  #         - Hello-World
+  #   - Using-Node:
+  #       requires:
+  #         - Fetch-Code
+  #   - Hold-for-Approval:
+  #       type: approval
+  #       requires:
+  #         - Using-Node
+  #         - Fetch-Code
+  #   - Now-Complete:
+  #       requires:
+  #       - Hold-for-Approval
   build-and-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
           context:
             - CIRCLECI_SAMPLE_CONTEXT
-          repo: ""
-          tag: ""
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          tag: "${CIRCLE_SHA1}"

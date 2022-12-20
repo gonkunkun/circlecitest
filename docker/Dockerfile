@@ -10,6 +10,3 @@ RUN --mount=type=secret,id=mysecret,uid=0 \
 RUN --mount=type=secret,id=mysecret2,uid=0 \
   cat /run/secrets/mysecret2 && \
   TEST_ENV2=$(cat /run/secrets/mysecret2)
-
-RUN echo ${TEST_ENV}
-RUN echo ${TEST_ENV2}

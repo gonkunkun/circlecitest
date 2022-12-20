@@ -86,20 +86,21 @@ jobs:
           name: Before
           command: |
             env
-      # - run:
-      #     name: Before
-      #     command: |
-      #       export GITHUB_TOKEN='${GITHUB_TOKEN}'
-      # - run:
-      #     name: After
-      #     command: |
-      #       env
+      - run:
+          name: docker build
+          command: |
+            tempfile=$(mktemp)
+            echo $GITHUB_TEST > $tempfile
+      - run:
+          name: After
+          command: |
+            echo $tempfile
       - aws-ecr/build-and-push-image:
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           tag: "${CIRCLE_SHA1}"
           path: "./docker"
           dockerfile: "Dockerfile"
-          extra-build-args: "--secret id=mysecret,env=GITHUB_TOKEN"
+          extra-build-args: "--secret id=mysecret,src=$tempfile"
 # https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
 # https://circleci.com/developer/ja/images/image/cimg/base
 

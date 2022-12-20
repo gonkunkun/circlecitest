@@ -73,6 +73,22 @@ jobs:
           docker tag ${AWS_RESOURCE_NAME_PREFIX}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}
           docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}
 # https://zenn.dev/takamin55/articles/6900fa8b2ac21c
+  aws-build-and-push:
+      docker:
+        - image: cimg/base
+      environment:
+        DOCKER_BUILDKIT: "1"
+      steps:
+        - checkout
+        - setup_remote_docker:
+            version: 20.10.2
+            docker_layer_caching: true
+        - aws-ecr/build-and-push-image:
+            repo: "${AWS_RESOURCE_NAME_PREFIX}"
+            tag: "${CIRCLE_SHA1}"
+            path: "./docker"
+            dockerfile: "Dockerfile"
+            extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
 
 workflows:
   # Example-Workflow:
@@ -94,15 +110,21 @@ workflows:
   #       - Hold-for-Approval
   build-and-deploy:
     jobs:
-    - aws-ecr/build-and-push-image:
+    - aws-build-and-push:
         context:
           - CIRCLECI_SAMPLE_CONTEXT
           - github_token
-        repo: "${AWS_RESOURCE_NAME_PREFIX}"
-        tag: "${CIRCLE_SHA1}"
-        path: "./docker"
-        dockerfile: "Dockerfile"
-        extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
-    - manual-build-and-push:
-        context:
-          - CIRCLECI_SAMPLE_CONTEXT
+    # - aws-ecr/build-and-push-image:
+    #     repo: "${AWS_RESOURCE_NAME_PREFIX}"
+    #     tag: "${CIRCLE_SHA1}"
+    #     path: "./docker"
+    #     dockerfile: "Dockerfile"
+    #     extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
+    # - manual-build-and-push:
+    #     context:
+    #       - CIRCLECI_SAMPLE_CONTEXT
+
+# https://github.com/CircleCI-Public/aws-ecr-orb/issues/143
+# https://github.com/CircleCI-Public/cimg-base/issues/147
+# https://github.com/CircleCI-Public/aws-ecr-orb/issues/77 こうするしかないのか
+# https://github.com/signavio/circleci-aws-ecr-eks-orb/pull/21

@@ -87,7 +87,7 @@ jobs:
           tag: "${CIRCLE_SHA1}"
           path: "./docker"
           dockerfile: "Dockerfile"
-          extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
+          # extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
 # https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
 # https://circleci.com/developer/ja/images/image/cimg/base
 

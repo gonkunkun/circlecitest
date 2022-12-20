@@ -92,7 +92,7 @@ jobs:
             tempfile=$(mktemp)
             echo $GITHUB_TEST > $tempfile
             echo $tempfile
-            ls /home/circleci/project/test.md
+            ls ./
       - run:
           name: After
           command: |

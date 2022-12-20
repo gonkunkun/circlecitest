@@ -4,5 +4,7 @@ RUN env
 
 RUN --mount=type=secret,id=mysecret,uid=0 cat /run/secrets/mysecret
 
-RUN echo /run/secrets/mysecret
+RUN echo `ls /`
+RUN echo `ls /run/`
+RUN echo `ls /run/secrets/`
 RUN echo ${TEST_ENV}

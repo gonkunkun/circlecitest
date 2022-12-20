@@ -86,14 +86,14 @@ jobs:
           name: Before
           command: |
             env
-      - run:
-          name: Before
-          command: |
-            export GITHUB_TOKEN='${GITHUB_TOKEN}'
-      - run:
-          name: After
-          command: |
-            env
+      # - run:
+      #     name: Before
+      #     command: |
+      #       export GITHUB_TOKEN='${GITHUB_TOKEN}'
+      # - run:
+      #     name: After
+      #     command: |
+      #       env
       - aws-ecr/build-and-push-image:
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           tag: "${CIRCLE_SHA1}"

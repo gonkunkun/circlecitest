@@ -75,7 +75,7 @@ jobs:
 # https://zenn.dev/takamin55/articles/6900fa8b2ac21c
   aws-build-and-push:
     docker:
-      - image: cimg/node:17.2
+      - image: cimg/base:2022.12
     environment:
       DOCKER_BUILDKIT: "1"
     steps:

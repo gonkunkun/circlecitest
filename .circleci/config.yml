@@ -97,10 +97,12 @@ workflows:
     - aws-ecr/build-and-push-image:
         context:
           - CIRCLECI_SAMPLE_CONTEXT
+          - github_token
         repo: "${AWS_RESOURCE_NAME_PREFIX}"
         tag: "${CIRCLE_SHA1}"
         path: "./docker"
         dockerfile: "Dockerfile"
+        extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
     - manual-build-and-push:
         context:
           - CIRCLECI_SAMPLE_CONTEXT

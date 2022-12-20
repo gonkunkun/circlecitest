@@ -74,20 +74,20 @@ jobs:
           docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}
 # https://zenn.dev/takamin55/articles/6900fa8b2ac21c
   aws-build-and-push:
-      docker:
-        - image: cimg/node:17.2
-      environment:
-        DOCKER_BUILDKIT: "1"
-      steps:
-        - setup_remote_docker:
-            version: 20.10.2
-            docker_layer_caching: true
-        - aws-ecr/build-and-push-image:
-            repo: "${AWS_RESOURCE_NAME_PREFIX}"
-            tag: "${CIRCLE_SHA1}"
-            path: "./docker"
-            dockerfile: "Dockerfile"
-            # extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
+    docker:
+      - image: docker:20.10.3-git
+    environment:
+      DOCKER_BUILDKIT: "1"
+    steps:
+      - setup_remote_docker:
+          version: 20.10.2
+          docker_layer_caching: true
+      - aws-ecr/build-and-push-image:
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          tag: "${CIRCLE_SHA1}"
+          path: "./docker"
+          dockerfile: "Dockerfile"
+          extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
 # https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
 # https://circleci.com/developer/ja/images/image/cimg/base
 

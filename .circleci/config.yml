@@ -92,6 +92,7 @@ jobs:
             tempfile=$(mktemp)
             echo $GITHUB_TEST > $tempfile
             echo $tempfile
+            ls
       - run:
           name: After
           command: |
@@ -101,7 +102,7 @@ jobs:
           tag: "${CIRCLE_SHA1}"
           path: "./docker"
           dockerfile: "Dockerfile"
-          extra-build-args: "--secret id=mysecret,src=$tempfile"
+          extra-build-args: "--secret id=mysecret,env=GITHUB_TOKEN"
 # https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
 # https://circleci.com/developer/ja/images/image/cimg/base
 

@@ -87,10 +87,11 @@ jobs:
           command: |
             env
       - run:
-          name: docker build
+          name: tempfile
           command: |
             tempfile=$(mktemp)
             echo $GITHUB_TEST > $tempfile
+            echo $tempfile
       - run:
           name: After
           command: |

@@ -75,7 +75,7 @@ jobs:
 # https://zenn.dev/takamin55/articles/6900fa8b2ac21c
   aws-build-and-push:
       docker:
-        - image: cimg/base
+        - image: docker:20.10.3-git
       environment:
         DOCKER_BUILDKIT: "1"
       steps:
@@ -89,6 +89,8 @@ jobs:
             path: "./docker"
             dockerfile: "Dockerfile"
             extra-build-args: "--secret id=github_access_token,env=GITHUB_TOKEN"
+# https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
+# https://circleci.com/developer/ja/images/image/cimg/base
 
 workflows:
   # Example-Workflow:

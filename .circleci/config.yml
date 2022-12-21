@@ -75,9 +75,7 @@ jobs:
 # https://zenn.dev/takamin55/articles/6900fa8b2ac21c
   aws-build-and-push:
     docker:
-      - image: cimg/base:2022.12
-    environment:
-      DOCKER_BUILDKIT: "1"
+      - image: cimg/base:current
     steps:
       - setup_remote_docker:
           version: 20.10.2
@@ -103,7 +101,7 @@ jobs:
           path: "./docker"
           dockerfile: "Dockerfile"
           extra-build-args: "--secret id=mysecret,src=/home/circleci/project/test.md --secret id=mysecret2,env=GITHUB_TOKEN"
-# https://github.com/CircleCI-Public/aws-ecr-orb/issues/77
+# https://github.com/CircleCI-Public/aws-ecr-orb/issues/7
 # https://circleci.com/developer/ja/images/image/cimg/base
 
 workflows:
